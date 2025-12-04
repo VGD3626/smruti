@@ -98,7 +98,7 @@
            focus:ring-0 placeholder-black/60 placeholder:font-light overflow-y-auto"
           placeholder="Paste your Gujarati text here..."></textarea>
       </div>
-<!-- 
+      <!-- 
       TOGGLE BUTTON
       <button id="toggleKeyboardBtn"
         class="mt-4 bg-green-700 hover:bg-green-800 text-white px-4 py-2 rounded-xl text-sm shadow-md transition">
@@ -107,22 +107,22 @@
 
       <!-- GUJARATI KEYBOARD -->
       <!-- TOGGLE BUTTON (SMALL, RIGHT-ALIGNED) -->
-<div class="w-[90%] sm:w-[70%] max-w-3xl mt-2 flex justify-end">
-  <button id="toggleKeyboardBtn"
-          class="text-xs px-3 py-1.5 rounded-lg bg-white/60 backdrop-blur-xl 
+      <div class="w-[90%] sm:w-[70%] max-w-3xl mt-2 flex justify-end">
+        <button id="toggleKeyboardBtn" class="text-xs px-3 py-1.5 rounded-lg bg-white/60 backdrop-blur-xl 
                  border border-white/30 shadow-md hover:bg-white/80 
                  text-gray-700 transition">
-        Show Gujarati Keyboard
-  </button>
-</div>
+          Show Gujarati Keyboard
+        </button>
+      </div>
 
-<!-- KEYBOARD -->
-<div id="gujaratiKeyboard"
-     class="hidden mt-3 w-[90%] sm:w-[70%] max-w-4xl bg-white/60 backdrop-blur-xl 
-            border border-white/20 shadow-xl rounded-3xl p-4 
-            grid grid-cols-5 sm:grid-cols-10 gap-2 text-center
+      <!-- KEYBOARD -->
+      <div id="gujaratiKeyboard" class="hidden mt-3 w-[90%] sm:w-[70%] max-w-4xl
+            bg-white/60 backdrop-blur-xl border border-white/20
+            shadow-md rounded-2xl p-3
+            grid grid-cols-12 sm:grid-cols-14 gap-1.5 text-center
             transition-all duration-300 ease-out opacity-0">
-</div>
+      </div>
+
 
 
 
@@ -282,12 +282,21 @@
 
       // Scroll helper
       function scrollIfNotVisible(element) {
-        const rect = element.getBoundingClientRect();
-        const visible = rect.top >= 0 && rect.bottom <= window.innerHeight;
-        if (!visible) {
-          element.scrollIntoView({ behavior: "smooth", block: "start" });
+        const el = element.getBoundingClientRect();
+        const input = textarea.getBoundingClientRect();
+
+        const elementFullyVisible = el.top >= 0 && el.bottom <= window.innerHeight;
+        const inputFullyVisible = input.top >= 0 && input.bottom <= window.innerHeight;
+
+        // Only scroll when:
+        // 1. Element is not fully visible
+        // 2. Input textarea is *fully* visible (not partially)
+        if (!elementFullyVisible && inputFullyVisible) {
+          element.scrollIntoView({ behavior: "smooth", block: "center" });
         }
       }
+
+
 
       // ---------------- 2000-WORD PROTECTION ----------------
       function exceedsLimit() {
@@ -478,8 +487,10 @@
         keyBtn.textContent = char;
 
         keyBtn.className =
+          keyBtn.className =
+          keyBtn.className =
           "px-2 py-1 bg-white/80 hover:bg-green-100 active:bg-green-200 " +
-          "rounded-xl shadow text-gray-900 transition text-lg";
+          "rounded-lg shadow-sm text-gray-900 transition text-base whitespace-nowrap";
 
         keyBtn.addEventListener("click", () => {
           insertAtCursor(textarea, char);
@@ -501,7 +512,7 @@
         textarea.selectionStart = textarea.selectionEnd = start + text.length;
       }
 
-     
+
       const keyboardContainer = document.getElementById("gujaratiKeyboard");
       const toggleKeyboardBtn = document.getElementById("toggleKeyboardBtn");
       const textArea = document.getElementById("inputBox");
