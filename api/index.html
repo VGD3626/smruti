@@ -13,23 +13,20 @@
 
     <style>
         body {
-            font-family: "Anek Gujarati", system-ui, sans-serif;
-
-            /* FIX: Prevent background size jump on scroll */
+            font-family: "Anek Gujarati", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
             background-image: url('api_bg.jpg');
-            background-size: 100% auto;
-            background-position: top center;
+            background-size: cover;
+            background-position: center;
             background-repeat: no-repeat;
-            background-attachment: scroll;
-            min-height: 100vh;
+            background-attachment: fixed;
+            min-height: 120vh;
         }
 
         .text-white-strong {
             text-shadow: 0 0 8px rgba(255, 255, 255, 1);
         }
     </style>
-
-    <base href="https://vgd3626.github.io/smruti/">
+      <base href="https://vgd3626.github.io/smruti/">
 
 </head>
 
@@ -42,23 +39,25 @@
         style="background-image: url('gujarat-bg.png');">
 
         <!-- NAVBAR -->
+        <!-- NAVBAR -->
         <nav
-            class="flex flex-col sm:flex-row sm:items-center sm:justify-between px-4 sm:px-6 py-5 tracking-wide space-y-4 sm:space-y-0">
+            class="flex flex-col sm:flex-row sm:items-center sm:justify-between px-6 py-5 tracking-wide space-y-4 sm:space-y-0">
 
-            <!-- LEFT: Branding -->
+            <!-- LEFT: Brand + Tagline -->
             <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-3 text-center sm:text-left">
-                <div class="font-bold text-3xl sm:text-5xl lg:text-6xl text-white-strong whitespace-nowrap">
+                <div class="font-bold text-4xl sm:text-6xl text-white-strong whitespace-nowrap">
                     સ્મૃતિ
                 </div>
 
-                <div class="flex flex-col leading-tight sm:leading-none">
-                    <span class="text-xs sm:text-sm text-white-strong">AI-powered Grammar</span>
-                    <span class="text-xs sm:text-sm text-white-strong">Checker for Gujarati</span>
+                <div class="flex flex-col leading-tight sm:pt-0 sm:leading-none">
+                    <span class="text-s text-white-strong">AI-powered Grammar</span>
+                    <span class="text-s text-white-strong">Checker for Gujarati</span>
                 </div>
             </div>
 
             <!-- RIGHT: Menu -->
-            <div class="flex justify-center sm:justify-end space-x-4 sm:space-x-8 text-white-strong text-sm sm:text-lg">
+            <div
+                class="flex justify-center sm:justify-end space-x-6 sm:space-x-10 text-white-strong text-base sm:text-lg">
                 <a href="./" class="hover:opacity-70 transition">Home</a>
                 <a href="./api/" class="hover:opacity-70 underline underline-offset-4 transition">API</a>
                 <a href="./about/" class="hover:opacity-70 transition">About</a>
@@ -66,40 +65,40 @@
 
         </nav>
 
+
         <!-- MAIN CONTENT -->
         <main class="px-4 sm:px-6 lg:px-10 pb-16 pt-4 sm:pt-8 flex flex-col items-center">
 
-            <!-- HERO CARD -->
+            <!-- HERO -->
             <section class="w-full max-w-5xl mb-8">
-                <div class="bg-white/60 backdrop-blur-xl border border-white/40 shadow-xl rounded-3xl p-5 sm:p-8">
-                    <h1 class="text-xl sm:text-3xl font-semibold text-gray-900 mb-3">
+                <div class="bg-white/60 backdrop-blur-xl border border-white/40 shadow-xl rounded-3xl p-6 sm:p-8">
+                    <h1 class="text-2xl sm:text-3xl font-semibold text-gray-900 mb-3">
                         Smruti API Documentation
                     </h1>
-
                     <p class="text-sm sm:text-base text-gray-700 mb-4">
-                        Integrate Gujarati grammar correction into your apps. This page explains endpoints, request
-                        formats, and usage examples.
+                        The Smruti API lets you integrate Gujarati grammar correction into your own applications.
+                        This page describes the available endpoints, request and response formats, and usage examples.
                     </p>
 
-                    <div class="grid gap-3 sm:grid-cols-3 text-sm text-gray-700">
-
+                    <div class="grid gap-4 sm:grid-cols-3 text-sm text-gray-700">
                         <div class="bg-white/60 rounded-2xl border border-white/40 p-3">
-                            <p class="text-[10px] uppercase tracking-wide text-gray-500 mb-1">Base URL</p>
-                            <p class="font-mono text-[11px] break-all">
+                            <p class="text-[11px] uppercase tracking-wide text-gray-500 mb-1">Base URL</p>
+                            <p class="font-mono text-xs break-all">
                                 https://vrund1346-Smruti-Gujarati-grammar-checker.hf.space
                             </p>
                         </div>
-
                         <div class="bg-white/60 rounded-2xl border border-white/40 p-3">
-                            <p class="text-[10px] uppercase tracking-wide text-gray-500 mb-1">Authentication</p>
-                            <p class="text-xs">No authentication (beta).</p>
+                            <p class="text-[11px] uppercase tracking-wide text-gray-500 mb-1">Authentication</p>
+                            <p class="text-xs">
+                                No authentication required (beta). Please use responsibly.
+                            </p>
                         </div>
-
                         <div class="bg-white/60 rounded-2xl border border-white/40 p-3">
-                            <p class="text-[10px] uppercase tracking-wide text-gray-500 mb-1">Content Type</p>
-                            <p class="text-xs font-mono">application/json</p>
+                            <p class="text-[11px] uppercase tracking-wide text-gray-500 mb-1">Content Type</p>
+                            <p class="text-xs">
+                                <span class="font-mono">application/json</span>
+                            </p>
                         </div>
-
                     </div>
                 </div>
             </section>
@@ -109,67 +108,77 @@
                 <div
                     class="bg-white/50 backdrop-blur-xl rounded-3xl border border-white/40 shadow-md p-4 sm:p-5 text-sm text-gray-800">
                     <h2 class="text-base font-semibold mb-2">Endpoints</h2>
-
-                    <ul class="list-disc list-inside space-y-1 text-sm">
-                        <li><a href="#correct" class="text-green-700 hover:underline font-medium">POST /correct</a></li>
+                    <ul class="list-disc list-inside space-y-1">
+                        <li><a href="#correct" class="text-green-700 hover:underline font-medium">POST /correct</a> –
+                            Get corrected Gujarati text</li>
                         <li><a href="#feedback" class="text-green-700 hover:underline font-medium">POST
-                                /store-feedback</a></li>
+                                /store-feedback</a> – Submit user feedback / gold corrections</li>
                     </ul>
                 </div>
             </section>
 
-            <!-- POST /correct -->
+            <!-- /correct ENDPOINT -->
             <section id="correct" class="w-full max-w-5xl mb-8">
-                <div class="bg-white/60 backdrop-blur-xl border border-white/40 shadow-xl rounded-3xl p-5 sm:p-8">
-
+                <div class="bg-white/60 backdrop-blur-xl border border-white/40 shadow-xl rounded-3xl p-6 sm:p-8">
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
-                        <h2 class="text-lg sm:text-xl font-semibold text-gray-900">POST /correct</h2>
+                        <h2 class="text-xl font-semibold text-gray-900">POST /correct</h2>
                         <span
-                            class="inline-flex items-center rounded-full bg-amber-100 text-amber-800 px-3 py-1 text-[10px] sm:text-xs font-semibold">
+                            class="inline-flex items-center rounded-full bg-amber-100 text-amber-800 px-3 py-1 text-xs font-semibold">
                             Beta
                         </span>
                     </div>
 
                     <p class="text-sm sm:text-base text-gray-700 mb-4">
-                        Send Gujarati text and receive a grammar-corrected version. Maximum length: 2000 characters.
+                        Sends a Gujarati sentence to Smruti and returns the grammar-corrected version.
+                        The input must contain Gujarati text and must not exceed 2000 characters.
                     </p>
 
-                    <!-- REQUEST TABLE -->
+                    <!-- REQUEST DETAILS -->
                     <div class="mb-5">
-                        <h3 class="text-sm font-semibold text-gray-900 mb-2">Request Body</h3>
+                        <h3 class="text-sm font-semibold text-gray-900 mb-2">Request</h3>
+                        <p class="text-xs uppercase tracking-wide text-gray-500 mb-1">
+                            POST &nbsp; <span class="font-mono text-[11px]">/correct</span>
+                        </p>
 
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left border-separate border-spacing-y-1 text-xs">
-                                <thead class="text-gray-600">
-                                    <tr>
+                        <p class="text-sm text-gray-700 mb-2 font-medium">Body (JSON)</p>
+                        <div class="overflow-x-auto text-xs">
+                            <table class="w-full text-left border-separate border-spacing-y-1">
+                                <thead>
+                                    <tr class="text-gray-600">
                                         <th class="py-1 pr-4">Field</th>
                                         <th class="py-1 pr-4">Type</th>
                                         <th class="py-1 pr-4">Required</th>
                                         <th class="py-1">Description</th>
                                     </tr>
                                 </thead>
-
                                 <tbody class="text-gray-800">
 
                                     <tr>
-                                        <td class="py-1 pr-4 font-mono">sentence</td>
-                                        <td class="py-1 pr-4">string</td>
-                                        <td class="py-1 pr-4">Yes</td>
-                                        <td class="py-1">Gujarati text to correct (≤ 2000 chars).</td>
+                                        <td class="py-1 pr-4 font-mono text-[12px]">sentence</td>
+                                        <td class="py-1 pr-4 text-[12px]">string</td>
+                                        <td class="py-1 pr-4 text-[12px]">Yes</td>
+                                        <td class="py-1 text-[12px]">
+                                            Gujarati text to correct. Must include Gujarati characters and must be ≤
+                                            2000 characters.
+                                        </td>
                                     </tr>
 
                                     <tr>
-                                        <td class="py-1 pr-4 font-mono">k1</td>
-                                        <td class="py-1 pr-4">integer</td>
-                                        <td class="py-1 pr-4">Optional</td>
-                                        <td class="py-1">Retriever depth. Default: 5.</td>
+                                        <td class="py-1 pr-4 font-mono text-[12px]">k1</td>
+                                        <td class="py-1 pr-4 text-[12px]">integer</td>
+                                        <td class="py-1 pr-4 text-[12px]">Optional</td>
+                                        <td class="py-1 text-[12px]">
+                                            Internal retrieval parameter (1–20). Default: <code>5</code>.
+                                        </td>
                                     </tr>
 
                                     <tr>
-                                        <td class="py-1 pr-4 font-mono">k2</td>
-                                        <td class="py-1 pr-4">integer</td>
-                                        <td class="py-1 pr-4">Optional</td>
-                                        <td class="py-1">Refinement depth. Default: 5.</td>
+                                        <td class="py-1 pr-4 font-mono text-[12px]">k2</td>
+                                        <td class="py-1 pr-4 text-[12px]">integer</td>
+                                        <td class="py-1 pr-4 text-[12px]">Optional</td>
+                                        <td class="py-1 text-[12px]">
+                                            Internal refinement parameter (1–20). Default: <code>5</code>.
+                                        </td>
                                     </tr>
 
                                 </tbody>
@@ -177,10 +186,23 @@
                         </div>
                     </div>
 
-                    <!-- SAMPLE REQUEST -->
-                    <h3 class="text-sm font-semibold text-gray-900 mb-2">Example request (curl)</h3>
+                    <!-- VALIDATION -->
+                    <h3 class="text-sm font-semibold text-gray-900 mt-4 mb-2">Validation Rules</h3>
+                    <ul class="list-disc list-inside text-sm text-gray-700 space-y-1">
+                        <li>Input must contain Gujarati characters.</li>
+                        <li>Input may not be empty.</li>
+                        <li>Input length must be ≤ 2000 characters.</li>
+                        <li>Gujarati text must be meaningful (more than 1 non-space character).</li>
+                        <li><code>k1</code> and <code>k2</code> must be integers between 1 and 20.</li>
+                    </ul>
 
-                    <pre class="bg-green-50/70 border border-green-700/20 text-gray-800 text-[11px] sm:text-xs p-4 rounded-2xl overflow-x-auto font-mono">
+
+                    <!-- SAMPLE REQUEST -->
+                    <div class="mb-4 mt-4">
+                        <h3 class="text-sm font-semibold text-gray-900 mb-2">Example request (curl)</h3>
+                        <pre class="bg-green-50/70 backdrop-blur-xl border border-green-700/20 
+           text-gray-800 text-[11px] sm:text-xs p-4 rounded-2xl 
+           overflow-x-auto font-mono">
 curl -X POST \
   https://vrund1346-Smruti-Gujarati-grammar-checker.hf.space/correct \
   -H "Content-Type: application/json" \
@@ -191,71 +213,93 @@ curl -X POST \
   }'
 </pre>
 
-                    <!-- SAMPLE RESPONSE -->
-                    <h3 class="text-sm font-semibold text-gray-900 mt-4 mb-2">Example response</h3>
 
-                    <pre class="bg-gray-50/70 border border-gray-500/20 text-gray-900 text-[11px] sm:text-xs p-4 rounded-2xl overflow-x-auto font-mono">
+                    </div>
+
+                    <!-- SAMPLE RESPONSE -->
+                    <div>
+                        <h3 class="text-sm font-semibold text-gray-900 mb-2">Example response</h3>
+                        <pre class="bg-gray-50/70 backdrop-blur-xl border border-gray-500/20 
+           text-gray-900 text-[11px] sm:text-xs p-4 rounded-2xl 
+           overflow-x-auto font-mono">
 {
   "corrected_text": "હું ગુજરાતી ભાષા શીખું છું."
 }
 </pre>
 
+                    </div>
                 </div>
             </section>
 
-            <!-- POST /store-feedback -->
+
+            <!-- /store-feedback ENDPOINT -->
             <section id="feedback" class="w-full max-w-5xl mb-10">
-                <div class="bg-white/60 backdrop-blur-xl border border-white/40 shadow-xl rounded-3xl p-5 sm:p-8">
+                <div class="bg-white/60 backdrop-blur-xl border border-white/40 shadow-xl rounded-3xl p-6 sm:p-8">
 
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
-                        <h2 class="text-lg sm:text-xl font-semibold text-gray-900">POST /store-feedback</h2>
+                        <h2 class="text-xl font-semibold text-gray-900">POST /store-feedback</h2>
                         <span
-                            class="inline-flex items-center rounded-full bg-amber-100 text-amber-800 px-3 py-1 text-[10px] sm:text-xs font-semibold">
+                            class="inline-flex items-center rounded-full bg-amber-100 text-amber-800 px-3 py-1 text-xs font-semibold">
                             Beta
                         </span>
                     </div>
 
                     <p class="text-sm sm:text-base text-gray-700 mb-4">
-                        Submit corrected Gujarati sentences to help improve the model.
+                        Stores user-provided corrections. The <code>incorrect_sentence</code> must contain Gujarati
+                        text.
+                        This feedback is used to improve future versions of the model.
                     </p>
 
                     <!-- REQUEST TABLE -->
-                    <div class="overflow-x-auto text-xs mb-4">
-                        <table class="w-full text-left border-separate border-spacing-y-1">
-                            <thead class="text-gray-600">
-                                <tr>
-                                    <th class="py-1 pr-4">Field</th>
-                                    <th class="py-1 pr-4">Type</th>
-                                    <th class="py-1 pr-4">Required</th>
-                                    <th class="py-1">Description</th>
-                                </tr>
-                            </thead>
+                    <div class="mb-5">
+                        <h3 class="text-sm font-semibold text-gray-900 mb-2">Request</h3>
+                        <p class="text-xs uppercase tracking-wide text-gray-500 mb-1">
+                            POST &nbsp; <span class="font-mono text-[11px]">/store-feedback</span>
+                        </p>
 
-                            <tbody class="text-gray-800">
+                        <p class="text-sm text-gray-700 mb-2 font-medium">Body (JSON)</p>
+                        <div class="overflow-x-auto text-xs">
+                            <table class="w-full text-left border-separate border-spacing-y-1">
+                                <thead>
+                                    <tr class="text-gray-600">
+                                        <th class="py-1 pr-4">Field</th>
+                                        <th class="py-1 pr-4">Type</th>
+                                        <th class="py-1 pr-4">Required</th>
+                                        <th class="py-1">Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-gray-800">
 
-                                <tr>
-                                    <td class="py-1 pr-4 font-mono">incorrect_sentence</td>
-                                    <td class="py-1 pr-4">string</td>
-                                    <td class="py-1 pr-4">Yes</td>
-                                    <td class="py-1">The original Gujarati sentence.</td>
-                                </tr>
+                                    <tr>
+                                        <td class="py-1 pr-4 font-mono text-[12px]">incorrect_sentence</td>
+                                        <td class="py-1 pr-4 text-[12px]">string</td>
+                                        <td class="py-1 pr-4 text-[12px]">Yes</td>
+                                        <td class="py-1 text-[12px]">
+                                            The original (incorrect) Gujarati sentence.
+                                            Must contain Gujarati text.
+                                        </td>
+                                    </tr>
 
-                                <tr>
-                                    <td class="py-1 pr-4 font-mono">correct_sentence</td>
-                                    <td class="py-1 pr-4">string</td>
-                                    <td class="py-1 pr-4">Yes</td>
-                                    <td class="py-1">Your corrected version (gold label).</td>
-                                </tr>
+                                    <tr>
+                                        <td class="py-1 pr-4 font-mono text-[12px]">correct_sentence</td>
+                                        <td class="py-1 pr-4 text-[12px]">string</td>
+                                        <td class="py-1 pr-4 text-[12px]">Yes</td>
+                                        <td class="py-1 text-[12px]">
+                                            The corrected (gold) version provided by the user.
+                                        </td>
+                                    </tr>
 
-                            </tbody>
-
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
 
                     <!-- SAMPLE REQUEST -->
-                    <h3 class="text-sm font-semibold text-gray-900 mb-2">Example request (curl)</h3>
-
-                    <pre class="bg-green-50/70 border border-green-700/20 text-gray-800 text-[11px] sm:text-xs p-4 rounded-2xl overflow-x-auto font-mono">
+                    <div class="mb-4">
+                        <h3 class="text-sm font-semibold text-gray-900 mb-2">Example request (curl)</h3>
+                        <pre class="bg-green-50/70 backdrop-blur-xl border border-green-700/20 
+           text-gray-800 text-[11px] sm:text-xs p-4 rounded-2xl 
+           overflow-x-auto font-mono">
 curl -X POST \
   https://vrund1346-Smruti-Gujarati-grammar-checker.hf.space/store-feedback \
   -H "Content-Type: application/json" \
@@ -264,26 +308,31 @@ curl -X POST \
     "correct_sentence": "હું ગુજરાતી ભાષા શીખું છું."
   }'
 </pre>
+                    </div>
 
                     <!-- SAMPLE RESPONSE -->
-                    <h3 class="text-sm font-semibold text-gray-900 mt-4 mb-2">Example response</h3>
-
-                    <pre class="bg-gray-50/70 border border-gray-500/20 text-gray-900 text-[11px] sm:text-xs p-4 rounded-2xl overflow-x-auto font-mono">
+                    <div>
+                        <h3 class="text-sm font-semibold text-gray-900 mb-2">Example response</h3>
+                        <pre class="bg-gray-50/70 backdrop-blur-xl border border-gray-500/20 
+           text-gray-900 text-[11px] sm:text-xs p-4 rounded-2xl 
+           overflow-x-auto font-mono">
 {
   "status": "success",
   "message": "Feedback stored successfully."
 }
 </pre>
+            </div>
 
                 </div>
             </section>
+
 
         </main>
 
         <!-- FOOTER -->
         <footer class="py-6 text-center text-gray-700 text-xs sm:text-sm">
             <p class="font-semibold text-gray-800">સ્મૃતિ · Gujarati Grammar Checker</p>
-            <p class="text-gray-500 mt-1">© 2025 Smruti. API in beta – endpoints may change.</p>
+            <p class="text-gray-500 mt-1">© 2025 Smruti. API in beta – endpoints and schema may evolve.</p>
         </footer>
 
     </div>
