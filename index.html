@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Anek+Gujarati:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <title>Smruti - Gujarati Grammar Checker</title>
+
+  <style>
+    body {
+      background-image: url('bg_6.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      min-height: 120vh;
+      font-family: "Anek Gujarati", sans-serif;
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .fade-in.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+
+    .text-white-strong {
+      text-shadow: 0 0 8px rgba(255, 255, 255, 1);
+    }
+
+    textarea {
+      caret-color: black;
+    }
+
+    .white-glow {
+      text-shadow:
+        0 0 15px rgba(255, 255, 255, 1),
+        0 0 30px rgba(255, 255, 255, 1),
+        0 0 50px rgba(255, 255, 255, 0.95),
+        0 0 80px rgba(255, 255, 255, 0.9),
+        0 0 120px rgba(255, 255, 255, 0.85),
+        0 0 160px rgba(255, 255, 255, 0.8);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Soft gradient overlay -->
+  <div class="absolute inset-0 bg-gradient-to-b from-white/70 to-transparent pointer-events-none"></div>
+
+  <div class="relative min-h-screen bg-no-repeat bg-contain bg-bottom" style="background-image: url('gujarat-bg.png');">
+
+    <!-- NAVBAR -->
+    <nav
+      class="flex flex-col sm:flex-row sm:items-center sm:justify-between px-6 py-5 tracking-wide space-y-4 sm:space-y-0">
+
+      <!-- LEFT: Brand + Tagline -->
+      <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-3 text-center sm:text-left">
+        <div class="font-bold text-4xl sm:text-6xl text-white-strong whitespace-nowrap">
+          સ્મૃતિ
+        </div>
+
+        <div class="flex flex-col leading-tight sm:pt-0 sm:leading-none">
+          <span class="text-s text-white-strong">AI-powered Grammar</span>
+          <span class="text-s text-white-strong">Checker for Gujarati</span>
+        </div>
+      </div>
+
+      <!-- RIGHT: Menu -->
+      <div class="flex justify-center sm:justify-end space-x-6 sm:space-x-10 text-white-strong text-base sm:text-lg">
+        <a href="#" class="hover:opacity-70 transition">Home</a>
+        <a href="api.html" class="hover:opacity-70 transition">API</a>
+        <a href="about.html" class="hover:opacity-70 transition">About</a>
+      </div>
+
+    </nav>
+
+    <!-- CONTENT -->
+    <div class="flex flex-col items-center text-center pt-10 sm:pt-20 pb-10">
+
+      <!-- INPUT TEXTAREA -->
+      <!-- INPUT TEXTAREA -->
+      <div class="w-[90%] sm:w-[70%] max-w-3xl">
+
+        <textarea id="inputBox" maxlength="2000" class="w-full min-h-40 sm:min-h-48 max-h-72 
+           bg-white/60 backdrop-blur-xl 
+           p-4 sm:p-6 shadow-2xl rounded-3xl 
+           border-none focus:outline-none 
+           focus:ring-0 placeholder-black/60 placeholder:font-light overflow-y-auto"
+          placeholder="Paste your Gujarati text here..."></textarea>
+      </div>
+
+
+      <!-- BUTTON -->
+      <button id="correctBtn" class="mt-8 sm:mt-10 bg-green-700 hover:bg-green-800 
+                   text-white font-semibold px-8 sm:px-12 py-2.5 sm:py-3 
+                   rounded-xl shadow-lg hover:shadow-xl 
+                   transition transform hover:scale-[1.02]">
+        Correct Errors
+      </button>
+
+      <!-- THEME-MATCHED GLASS LOADER -->
+      <div id="loader" class="hidden w-[90%] sm:w-[70%] max-w-3xl mt-8
+            bg-white/40 backdrop-blur-xl border border-white/30 
+            rounded-3xl shadow-xl p-6 flex items-center justify-center">
+
+        <div class="flex flex-col items-center space-y-3">
+
+          <!-- Spinner -->
+          <div class="h-8 w-8 border-4 border-green-700/40 border-t-green-700 
+                    rounded-full animate-spin"></div>
+
+          <!-- Text -->
+          <p class="text-gray-700 text-sm font-medium tracking-wide">
+            Processing your text…
+          </p>
+        </div>
+      </div>
+
+
+      <!-- OUTPUT CARD -->
+      <div id="outputBox" class="hidden w-[90%] sm:w-[70%] max-w-3xl mt-8
+                bg-white/60 backdrop-blur-xl shadow-2xl rounded-3xl
+                p-4 sm:p-6 text-left text-gray-900">
+
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-base sm:text-lg text-gray-800">
+            Corrected Text
+          </h2>
+        </div>
+
+        <div class="h-px bg-gray-200/70 mb-3"></div>
+
+        <p id="correctedText" class="whitespace-pre-wrap leading-relaxed text-sm sm:text-base">
+        </p>
+
+        <!-- PROFESSIONAL FEEDBACK BUTTON -->
+        <button id="provideCorrectBtn" class="mt-4 text-green-800 font-medium text-sm hover:opacity-80 transition">
+          Was the output correct?
+        </button>
+
+        <!-- MATCHED GLASS THEME MANUAL CORRECTION BOX -->
+        <div id="manualCorrectionBox" class="hidden w-full mt-6 bg-white/60 backdrop-blur-xl shadow-2xl 
+            rounded-3xl p-4 sm:p-6 text-left">
+
+          <h3 class="text-base text-gray-800 mb-3">
+            Help us improve! Share the improved version of correction below.
+          </h3>
+
+          <textarea id="manualCorrectionInput" class="w-full min-h-40 max-h-72 
+                 bg-white/60 backdrop-blur-xl shadow-xl
+                 p-4 sm:p-6 
+                 rounded-3xl  
+                 border border-white/20
+                 focus:outline-none focus:ring-0
+                 placeholder-black/40 placeholder:font-light 
+                 text-sm sm:text-base
+                 overflow-y-auto" placeholder="Type the correct text here...">
+</textarea>
+
+
+          <button id="submitManualCorrection" class="mt-4 bg-green-700 hover:bg-green-800 text-white
+                   px-6 py-2 rounded-xl shadow-lg transition font-semibold">
+            Submit
+          </button>
+
+          <!-- ORIGINAL INPUT DISPLAY -->
+          <div id="originalInputBox" class="hidden mt-6 text-gray-800 text-sm">
+            <h4 class="font-semibold mb-1">Your original input:</h4>
+            <div id="originalInputText" class="whitespace-pre-wrap bg-white/50 backdrop-blur-md 
+                    p-3 rounded-xl shadow-inner text-gray-700"></div>
+          </div>
+        </div>
+      </div>
+      <!-- THANK YOU MESSAGE -->
+      <div id="thankYouMessage" class="hidden mt-4 bg-green-700/90 text-white px-4 py-2 rounded-xl 
+            shadow-lg text-sm font-medium text-center">
+        Thank you for providing the correction!
+      </div>
+
+
+      <!-- FOOTER -->
+      <footer class="mt-10 sm:mt-20 py-8 text-center text-gray-700">
+        <footer class="py-6 text-center text-gray-700 text-xs sm:text-sm">
+          <p class="font-semibold text-gray-800">સ્મૃતિ · Gujarati Grammar Checker</p>
+          <p class="text-gray-500 mt-1">
+            © 2025 Smruti. All rights reserved.
+          </p>
+        </footer>
+
+    </div>
+
+    <!-- JS -->
+    <script>
+  const textarea = document.getElementById("inputBox");
+  const outputBox = document.getElementById("outputBox");
+  const correctedTextEl = document.getElementById("correctedText");
+  const correctBtn = document.getElementById("correctBtn");
+
+  const provideBtn = document.getElementById("provideCorrectBtn");
+  const manualBox = document.getElementById("manualCorrectionBox");
+  const manualInput = document.getElementById("manualCorrectionInput");
+  const submitManualBtn = document.getElementById("submitManualCorrection");
+
+  const originalInputSection = document.getElementById("originalInputBox");
+  const originalInputText = document.getElementById("originalInputText");
+  const thankYouMessage = document.getElementById("thankYouMessage");
+
+  const loader = document.getElementById("loader");
+
+  let correctionSubmitted = false;
+
+  // ---------------- WORD COUNT FUNCTION ----------------
+  function countWords(text) {
+    return text
+      .trim()
+      .split(/\s+/)
+      .filter(w => w.length > 0).length;
+  }
+
+  // Create live counter element if not present
+  let wordCounter = document.createElement("div");
+  wordCounter.id = "wordCounter";
+  wordCounter.className = "text-right text-xs text-gray-700 mt-1 pr-1";
+  textarea.parentElement.appendChild(wordCounter);
+
+  function updateWordCounter() {
+    const words = countWords(textarea.value);
+    wordCounter.textContent = `${words} / 2000 words`;
+
+    if (words > 1990) {
+      wordCounter.classList.add("text-red-600", "font-semibold");
+    } else {
+      wordCounter.classList.remove("text-red-600", "font-semibold");
+    }
+  }
+
+  // Auto-resize + word counter update
+  textarea.addEventListener("input", () => {
+    textarea.style.height = "auto";
+    textarea.style.height = textarea.scrollHeight + "px";
+
+    updateWordCounter();
+  });
+
+  updateWordCounter(); // initial
+
+  // Scroll helper
+  function scrollIfNotVisible(element) {
+    const rect = element.getBoundingClientRect();
+    const visible = rect.top >= 0 && rect.bottom <= window.innerHeight;
+    if (!visible) {
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }
+
+  // ---------------- 2000-WORD PROTECTION ----------------
+  function exceedsLimit() {
+    const wordCount = countWords(textarea.value);
+    return wordCount > 2000;
+  }
+
+  // ----------------- CORRECT BUTTON -----------------
+  correctBtn.addEventListener("click", async () => {
+    const inputText = textarea.value.trim();
+
+    if (!inputText) return;
+
+    // WORD LIMIT CHECK
+    if (exceedsLimit()) {
+      alert("Input cannot exceed 2000 words.");
+      return;
+    }
+
+    // Reset UI
+    correctedTextEl.textContent = "";
+    manualBox.classList.add("hidden");
+    originalInputSection.classList.add("hidden");
+    thankYouMessage.classList.add("hidden");
+    outputBox.classList.add("hidden");
+
+    correctionSubmitted = false;
+    provideBtn.classList.remove("hidden");
+
+    // Show loader
+    loader.classList.remove("hidden");
+
+    // ---------------- REAL API CALL ----------------
+    let corrected = inputText;
+    try {
+      const response = await fetch(
+        "https://vrund1346-Smruti-Gujarati-grammar-checker.hf.space/correct",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            sentence: inputText,
+            model_name: "gpt-4o",
+            k1: 7,
+            k2: 1
+          })
+        }
+      );
+
+      const data = await response.json();
+      corrected = data?.corrected_text || inputText;
+
+    } catch (err) {
+      console.error("API call failed:", err);
+    }
+    // -------------------------------------------------
+
+    // Hide loader
+    loader.classList.add("hidden");
+
+    // Show output
+    correctedTextEl.textContent = corrected;
+    outputBox.classList.remove("hidden");
+
+    setTimeout(() => scrollIfNotVisible(outputBox), 100);
+  });
+
+  // ----------------- "WAS OUTPUT CORRECT?" BUTTON -----------------
+  provideBtn.addEventListener("click", () => {
+    if (correctionSubmitted) return;
+
+    manualInput.value = correctedTextEl.textContent.trim();
+    manualBox.classList.remove("hidden");
+
+    setTimeout(() => scrollIfNotVisible(manualBox), 50);
+  });
+
+  // ----------------- SUBMIT MANUAL CORRECTION -----------------
+  submitManualBtn.addEventListener("click", async () => {
+    if (correctionSubmitted) return;
+
+    const userCorrected = manualInput.value.trim();
+    if (!userCorrected) return;
+
+    // Replace displayed corrected text
+    correctedTextEl.textContent = userCorrected;
+
+    // Show original input
+    const originalInput = textarea.value.trim();
+    originalInputText.textContent = originalInput;
+    originalInputSection.classList.remove("hidden");
+
+    // Show thank-you
+    thankYouMessage.classList.remove("hidden");
+    thankYouMessage.style.opacity = "1";
+
+    correctionSubmitted = true;
+    provideBtn.classList.add("hidden");
+    manualBox.classList.add("hidden");
+
+    // ---------------- SEND FEEDBACK TO API ----------------
+    try {
+      await fetch(
+        "https://vrund1346-Smruti-Gujarati-grammar-checker.hf.space/store-feedback",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            incorrect_sentence: originalInput,
+            correct_sentence: userCorrected
+          })
+        }
+      );
+    } catch (err) {
+      console.error("Feedback API failed:", err);
+    }
+    // -------------------------------------------------------
+
+    console.log("User correction sent to API:", { originalInput, userCorrected });
+
+    // Scroll to thank-you
+    setTimeout(() => scrollIfNotVisible(thankYouMessage), 100);
+
+    // Fade-out after 2 seconds
+    setTimeout(() => {
+      thankYouMessage.style.transition = "opacity 0.6s ease";
+      thankYouMessage.style.opacity = "0";
+
+      setTimeout(() => {
+        thankYouMessage.classList.add("hidden");
+        thankYouMessage.style.opacity = "1";
+      }, 600);
+    }, 2000);
+  });
+</script>
+
+
+
+</body>
+
+</html>
