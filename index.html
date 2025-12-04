@@ -98,6 +98,32 @@
            focus:ring-0 placeholder-black/60 placeholder:font-light overflow-y-auto"
           placeholder="Paste your Gujarati text here..."></textarea>
       </div>
+<!-- 
+      TOGGLE BUTTON
+      <button id="toggleKeyboardBtn"
+        class="mt-4 bg-green-700 hover:bg-green-800 text-white px-4 py-2 rounded-xl text-sm shadow-md transition">
+        Show Gujarati Keyboard
+      </button> -->
+
+      <!-- GUJARATI KEYBOARD -->
+      <!-- TOGGLE BUTTON (SMALL, RIGHT-ALIGNED) -->
+<div class="w-[90%] sm:w-[70%] max-w-3xl mt-2 flex justify-end">
+  <button id="toggleKeyboardBtn"
+          class="text-xs px-3 py-1.5 rounded-lg bg-white/60 backdrop-blur-xl 
+                 border border-white/30 shadow-md hover:bg-white/80 
+                 text-gray-700 transition">
+        Show Gujarati Keyboard
+  </button>
+</div>
+
+<!-- KEYBOARD -->
+<div id="gujaratiKeyboard"
+     class="hidden mt-3 w-[90%] sm:w-[70%] max-w-4xl bg-white/60 backdrop-blur-xl 
+            border border-white/20 shadow-xl rounded-3xl p-4 
+            grid grid-cols-5 sm:grid-cols-10 gap-2 text-center
+            transition-all duration-300 ease-out opacity-0">
+</div>
+
 
 
       <!-- BUTTON -->
@@ -201,202 +227,340 @@
 
     <!-- JS -->
     <script>
-  const textarea = document.getElementById("inputBox");
-  const outputBox = document.getElementById("outputBox");
-  const correctedTextEl = document.getElementById("correctedText");
-  const correctBtn = document.getElementById("correctBtn");
+      const textarea = document.getElementById("inputBox");
+      const outputBox = document.getElementById("outputBox");
+      const correctedTextEl = document.getElementById("correctedText");
+      const correctBtn = document.getElementById("correctBtn");
 
-  const provideBtn = document.getElementById("provideCorrectBtn");
-  const manualBox = document.getElementById("manualCorrectionBox");
-  const manualInput = document.getElementById("manualCorrectionInput");
-  const submitManualBtn = document.getElementById("submitManualCorrection");
+      const provideBtn = document.getElementById("provideCorrectBtn");
+      const manualBox = document.getElementById("manualCorrectionBox");
+      const manualInput = document.getElementById("manualCorrectionInput");
+      const submitManualBtn = document.getElementById("submitManualCorrection");
 
-  const originalInputSection = document.getElementById("originalInputBox");
-  const originalInputText = document.getElementById("originalInputText");
-  const thankYouMessage = document.getElementById("thankYouMessage");
+      const originalInputSection = document.getElementById("originalInputBox");
+      const originalInputText = document.getElementById("originalInputText");
+      const thankYouMessage = document.getElementById("thankYouMessage");
 
-  const loader = document.getElementById("loader");
+      const loader = document.getElementById("loader");
 
-  let correctionSubmitted = false;
+      let correctionSubmitted = false;
 
-  // ---------------- WORD COUNT FUNCTION ----------------
-  function countWords(text) {
-    return text
-      .trim()
-      .split(/\s+/)
-      .filter(w => w.length > 0).length;
-  }
+      // ---------------- WORD COUNT FUNCTION ----------------
+      function countWords(text) {
+        return text
+          .trim()
+          .split(/\s+/)
+          .filter(w => w.length > 0).length;
+      }
 
-  // Create live counter element if not present
-  let wordCounter = document.createElement("div");
-  wordCounter.id = "wordCounter";
-  wordCounter.className = "text-right text-xs text-gray-700 mt-1 pr-1";
-  textarea.parentElement.appendChild(wordCounter);
+      // Create live counter element if not present
+      let wordCounter = document.createElement("div");
+      wordCounter.id = "wordCounter";
+      wordCounter.className = "text-right text-xs text-gray-700 mt-1 pr-1";
+      textarea.parentElement.appendChild(wordCounter);
 
-  function updateWordCounter() {
-    const words = countWords(textarea.value);
-    wordCounter.textContent = `${words} / 2000 words`;
+      function updateWordCounter() {
+        const words = countWords(textarea.value);
+        wordCounter.textContent = `${words} / 2000 words`;
 
-    if (words > 1990) {
-      wordCounter.classList.add("text-red-600", "font-semibold");
-    } else {
-      wordCounter.classList.remove("text-red-600", "font-semibold");
-    }
-  }
-
-  // Auto-resize + word counter update
-  textarea.addEventListener("input", () => {
-    textarea.style.height = "auto";
-    textarea.style.height = textarea.scrollHeight + "px";
-
-    updateWordCounter();
-  });
-
-  updateWordCounter(); // initial
-
-  // Scroll helper
-  function scrollIfNotVisible(element) {
-    const rect = element.getBoundingClientRect();
-    const visible = rect.top >= 0 && rect.bottom <= window.innerHeight;
-    if (!visible) {
-      element.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  }
-
-  // ---------------- 2000-WORD PROTECTION ----------------
-  function exceedsLimit() {
-    const wordCount = countWords(textarea.value);
-    return wordCount > 2000;
-  }
-
-  // ----------------- CORRECT BUTTON -----------------
-  correctBtn.addEventListener("click", async () => {
-    const inputText = textarea.value.trim();
-
-    if (!inputText) return;
-
-    // WORD LIMIT CHECK
-    if (exceedsLimit()) {
-      alert("Input cannot exceed 2000 words.");
-      return;
-    }
-
-    // Reset UI
-    correctedTextEl.textContent = "";
-    manualBox.classList.add("hidden");
-    originalInputSection.classList.add("hidden");
-    thankYouMessage.classList.add("hidden");
-    outputBox.classList.add("hidden");
-
-    correctionSubmitted = false;
-    provideBtn.classList.remove("hidden");
-
-    // Show loader
-    loader.classList.remove("hidden");
-
-    // ---------------- REAL API CALL ----------------
-    let corrected = inputText;
-    try {
-      const response = await fetch(
-        "https://vrund1346-Smruti-Gujarati-grammar-checker.hf.space/correct",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            sentence: inputText,
-            model_name: "gpt-4o",
-            k1: 7,
-            k2: 1
-          })
+        if (words > 1990) {
+          wordCounter.classList.add("text-red-600", "font-semibold");
+        } else {
+          wordCounter.classList.remove("text-red-600", "font-semibold");
         }
-      );
+      }
 
-      const data = await response.json();
-      corrected = data?.corrected_text || inputText;
+      // Auto-resize + word counter update
+      textarea.addEventListener("input", () => {
+        textarea.style.height = "auto";
+        textarea.style.height = textarea.scrollHeight + "px";
 
-    } catch (err) {
-      console.error("API call failed:", err);
-    }
-    // -------------------------------------------------
+        updateWordCounter();
+      });
 
-    // Hide loader
-    loader.classList.add("hidden");
+      updateWordCounter(); // initial
 
-    // Show output
-    correctedTextEl.textContent = corrected;
-    outputBox.classList.remove("hidden");
-
-    setTimeout(() => scrollIfNotVisible(outputBox), 100);
-  });
-
-  // ----------------- "WAS OUTPUT CORRECT?" BUTTON -----------------
-  provideBtn.addEventListener("click", () => {
-    if (correctionSubmitted) return;
-
-    manualInput.value = correctedTextEl.textContent.trim();
-    manualBox.classList.remove("hidden");
-
-    setTimeout(() => scrollIfNotVisible(manualBox), 50);
-  });
-
-  // ----------------- SUBMIT MANUAL CORRECTION -----------------
-  submitManualBtn.addEventListener("click", async () => {
-    if (correctionSubmitted) return;
-
-    const userCorrected = manualInput.value.trim();
-    if (!userCorrected) return;
-
-    // Replace displayed corrected text
-    correctedTextEl.textContent = userCorrected;
-
-    // Show original input
-    const originalInput = textarea.value.trim();
-    originalInputText.textContent = originalInput;
-    originalInputSection.classList.remove("hidden");
-
-    // Show thank-you
-    thankYouMessage.classList.remove("hidden");
-    thankYouMessage.style.opacity = "1";
-
-    correctionSubmitted = true;
-    provideBtn.classList.add("hidden");
-    manualBox.classList.add("hidden");
-
-    // ---------------- SEND FEEDBACK TO API ----------------
-    try {
-      await fetch(
-        "https://vrund1346-Smruti-Gujarati-grammar-checker.hf.space/store-feedback",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            incorrect_sentence: originalInput,
-            correct_sentence: userCorrected
-          })
+      // Scroll helper
+      function scrollIfNotVisible(element) {
+        const rect = element.getBoundingClientRect();
+        const visible = rect.top >= 0 && rect.bottom <= window.innerHeight;
+        if (!visible) {
+          element.scrollIntoView({ behavior: "smooth", block: "start" });
         }
-      );
-    } catch (err) {
-      console.error("Feedback API failed:", err);
-    }
-    // -------------------------------------------------------
+      }
 
-    console.log("User correction sent to API:", { originalInput, userCorrected });
+      // ---------------- 2000-WORD PROTECTION ----------------
+      function exceedsLimit() {
+        const wordCount = countWords(textarea.value);
+        return wordCount > 2000;
+      }
 
-    // Scroll to thank-you
-    setTimeout(() => scrollIfNotVisible(thankYouMessage), 100);
+      // ----------------- CORRECT BUTTON -----------------
+      correctBtn.addEventListener("click", async () => {
+        const inputText = textarea.value.trim();
 
-    // Fade-out after 2 seconds
-    setTimeout(() => {
-      thankYouMessage.style.transition = "opacity 0.6s ease";
-      thankYouMessage.style.opacity = "0";
+        if (!inputText) return;
 
-      setTimeout(() => {
+        // WORD LIMIT CHECK
+        if (exceedsLimit()) {
+          alert("Input cannot exceed 2000 words.");
+          return;
+        }
+
+        // Reset UI
+        correctedTextEl.textContent = "";
+        manualBox.classList.add("hidden");
+        originalInputSection.classList.add("hidden");
         thankYouMessage.classList.add("hidden");
+        outputBox.classList.add("hidden");
+
+        correctionSubmitted = false;
+        provideBtn.classList.remove("hidden");
+
+        // Show loader
+        loader.classList.remove("hidden");
+
+        // ---------------- REAL API CALL ----------------
+        let corrected = inputText;
+        try {
+          const response = await fetch(
+            "https://vrund1346-Smruti-Gujarati-grammar-checker.hf.space/correct",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                sentence: inputText,
+                model_name: "gpt-4o",
+                k1: 7,
+                k2: 1
+              })
+            }
+          );
+
+          const data = await response.json();
+          corrected = data?.corrected_text || inputText;
+
+        } catch (err) {
+          console.error("API call failed:", err);
+        }
+        // -------------------------------------------------
+
+        // Hide loader
+        loader.classList.add("hidden");
+
+        // Show output
+        correctedTextEl.textContent = corrected;
+        outputBox.classList.remove("hidden");
+
+        setTimeout(() => scrollIfNotVisible(outputBox), 100);
+      });
+
+      // ----------------- "WAS OUTPUT CORRECT?" BUTTON -----------------
+      provideBtn.addEventListener("click", () => {
+        if (correctionSubmitted) return;
+
+        manualInput.value = correctedTextEl.textContent.trim();
+        manualBox.classList.remove("hidden");
+
+        setTimeout(() => scrollIfNotVisible(manualBox), 50);
+      });
+
+      // ----------------- SUBMIT MANUAL CORRECTION -----------------
+      submitManualBtn.addEventListener("click", async () => {
+        if (correctionSubmitted) return;
+
+        const userCorrected = manualInput.value.trim();
+        if (!userCorrected) return;
+
+        // Replace displayed corrected text
+        correctedTextEl.textContent = userCorrected;
+
+        // Show original input
+        const originalInput = textarea.value.trim();
+        originalInputText.textContent = originalInput;
+        originalInputSection.classList.remove("hidden");
+
+        // Show thank-you
+        thankYouMessage.classList.remove("hidden");
         thankYouMessage.style.opacity = "1";
-      }, 600);
-    }, 2000);
-  });
-</script>
+
+        correctionSubmitted = true;
+        provideBtn.classList.add("hidden");
+        manualBox.classList.add("hidden");
+
+        // ---------------- SEND FEEDBACK TO API ----------------
+        try {
+          await fetch(
+            "https://vrund1346-Smruti-Gujarati-grammar-checker.hf.space/store-feedback",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                incorrect_sentence: originalInput,
+                correct_sentence: userCorrected
+              })
+            }
+          );
+        } catch (err) {
+          console.error("Feedback API failed:", err);
+        }
+        // -------------------------------------------------------
+
+        console.log("User correction sent to API:", { originalInput, userCorrected });
+
+        // Scroll to thank-you
+        setTimeout(() => scrollIfNotVisible(thankYouMessage), 100);
+
+        // Fade-out after 2 seconds
+        setTimeout(() => {
+          thankYouMessage.style.transition = "opacity 0.6s ease";
+          thankYouMessage.style.opacity = "0";
+
+          setTimeout(() => {
+            thankYouMessage.classList.add("hidden");
+            thankYouMessage.style.opacity = "1";
+          }, 600);
+        }, 2000);
+      });
+
+      const keyboard = document.getElementById("gujaratiKeyboard");
+
+      const gujaratiKeys = [
+
+        // -----------------------
+        // 1. VOWELS (સ્વર)
+        // -----------------------
+        "અ", "આ", "ઇ", "ઈ", "ઉ", "ઊ",
+        "એ", "ઐ", "ઓ", "ઔ",
+        "અં", "અઃ",
+
+        // -----------------------
+        // 2. CONSONANTS (વ્યંજન)
+        // -----------------------
+        "ક", "ખ", "ગ", "ઘ", "ઙ",
+        "ચ", "છ", "જ", "ઝ", "ઞ",
+        "ટ", "ઠ", "ડ", "ઢ", "ણ",
+        "ત", "થ", "દ", "ધ", "ન",
+        "પ", "ફ", "બ", "ભ", "મ",
+        "ય", "ર", "લ", "વ",
+        "શ", "ષ", "સ", "હ",
+        "ળ",
+        "ક્ષ", "જ્ઞ",
+
+        // -----------------------
+        // 3. VOWEL SIGNS / MATRAS (માત્રાઓ)
+        // -----------------------
+        "ા", "િ", "ી",
+        "ુ", "ૂ",
+        "ે", "ૈ",
+        "ો", "ૌ",
+        "ૃ",
+        "ૅ", "ૉ",
+
+        // -----------------------
+        // 4. SPECIAL SIGNS
+        // -----------------------
+        "ઁ",  // Chandrabindu
+        "ં",  // Anuswar
+        "ઃ",  // Visarga
+
+        // -----------------------
+        // 5. GUJARATI NUMERALS
+        // -----------------------
+        "૦", "૧", "૨", "૩", "૪",
+        "૫", "૬", "૭", "૮", "૯"
+      ];
+
+
+      // Render keys
+      gujaratiKeys.forEach(char => {
+        const keyBtn = document.createElement("button");
+        keyBtn.textContent = char;
+
+        keyBtn.className =
+          "px-2 py-1 bg-white/80 hover:bg-green-100 active:bg-green-200 " +
+          "rounded-xl shadow text-gray-900 transition text-lg";
+
+        keyBtn.addEventListener("click", () => {
+          insertAtCursor(textarea, char);
+          textarea.dispatchEvent(new Event("input"));
+        });
+
+        keyboard.appendChild(keyBtn);
+      });
+
+      // Insert at cursor position
+      function insertAtCursor(textarea, text) {
+        const start = textarea.selectionStart;
+        const end = textarea.selectionEnd;
+
+        const before = textarea.value.substring(0, start);
+        const after = textarea.value.substring(end);
+
+        textarea.value = before + text + after;
+        textarea.selectionStart = textarea.selectionEnd = start + text.length;
+      }
+
+     
+      const keyboardContainer = document.getElementById("gujaratiKeyboard");
+      const toggleKeyboardBtn = document.getElementById("toggleKeyboardBtn");
+      const textArea = document.getElementById("inputBox");
+
+      // Build keyboard UI
+      function renderGujaratiKeyboard() {
+        keyboardContainer.innerHTML = ""; // clear existing
+
+        gujaratiKeys.forEach(key => {
+          const btn = document.createElement("button");
+
+          btn.textContent = key;
+          btn.className =
+            "bg-white/80 hover:bg-white text-gray-800 px-2 py-1 rounded-lg shadow text-sm transition font-medium";
+
+          btn.onclick = () => {
+            insertAtCursor(textArea, key);
+            textArea.focus();
+          };
+
+          keyboardContainer.appendChild(btn);
+        });
+      }
+      renderGujaratiKeyboard();
+
+      // Insert character at cursor position
+      function insertAtCursor(textArea, char) {
+        const start = textArea.selectionStart;
+        const end = textArea.selectionEnd;
+
+        textArea.value =
+          textArea.value.substring(0, start) + char + textArea.value.substring(end);
+
+        textArea.selectionStart = textArea.selectionEnd = start + char.length;
+
+        // Auto-resize textarea
+        textArea.style.height = "auto";
+        textArea.style.height = textArea.scrollHeight + "px";
+      }
+
+      // Toggle keyboard visibility
+      let keyboardVisible = false;
+
+      toggleKeyboardBtn.addEventListener("click", () => {
+        keyboardVisible = !keyboardVisible;
+
+        if (keyboardVisible) {
+          keyboardContainer.classList.remove("hidden");
+          setTimeout(() => (keyboardContainer.style.opacity = "1"), 50);
+          toggleKeyboardBtn.textContent = "Hide Gujarati Keyboard";
+        } else {
+          keyboardContainer.style.opacity = "0";
+          setTimeout(() => keyboardContainer.classList.add("hidden"), 200);
+          toggleKeyboardBtn.textContent = "Show Gujarati Keyboard";
+        }
+      });
+
+
+    </script>
 
 
 
