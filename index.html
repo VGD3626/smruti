@@ -4,9 +4,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="Smruti is an AI-powered Gujarati Grammar Checker that instantly corrects grammar, spelling, matras, and sentence structure in Gujarati text. Free online Gujarati GEC tool for students, writers, and professionals.">
+  <meta name="keywords" 
+  content="Gujarati grammar checker, AI-Powered grammar checker, Gujarati spell checker, Gujarati GEC, Gujarati NLP, Gujarati proofreading tool, Gujarati writing assistant, LLM-Memory, AI-Memory, NLP-Research, Smruti, IJCNLP-AACL 2025">
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Anek+Gujarati:wght@300;400;500;600;700&display=swap"
     rel="stylesheet">
+  <link rel="canonical" href="https://vgd3626.github.io/smruti/">
   <title>Smruti - Gujarati Grammar Checker</title>
 
   <style>
@@ -20,6 +25,26 @@
       min-height: 120vh;
       font-family: "Anek Gujarati", sans-serif;
     }
+
+    /* Default (desktop/tablets) */
+    body {
+      background-image: url('api_bg.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      /* DESKTOP: fixed */
+    }
+
+    @media (max-width: 768px) {
+      body {
+        background-attachment: scroll !important;
+        background-size: 100% auto;
+        /* prevents zoom on scroll */
+        background-position: top center;
+      }
+    }
+
 
     .fade-in {
       opacity: 0;
